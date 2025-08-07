@@ -4,11 +4,15 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Search, User, ShoppingCart } from "lucide-react"
+import { Search, User, ShoppingCart } from 'lucide-react'
 import Cart from "@/components/cart"
 
 export default function Header() {
   const [isCartOpen, setIsCartOpen] = useState(false)
+  // Estado para simular o status de login do usuário
+  // Altere para 'true' para testar o estado logado, ou 'false' para deslogado
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [isLoggedIn, setIsLoggedIn] = useState(true) 
 
   return (
     <>
@@ -63,14 +67,24 @@ export default function Header() {
                 </span>
               </Button>
 
-              {/* User Avatar */}
-              <Button variant="ghost" size="sm" className="hidden md:flex text-gray-700 hover:text-black p-2">
-              <Link href="/perfil">
-                <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center transition-colors">
-                  <User className="h-4 w-4" />
-                </div>
-              </Link>
-              </Button>
+              {/* User Avatar / Sign In Button (Conditional) */}
+              {isLoggedIn ? (
+                <Button asChild variant="ghost" size="sm" className="hidden md:flex text-gray-700 hover:text-black p-2">
+                  <Link href="/perfil">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center transition-colors">
+                      <User className="h-4 w-4" />
+                    </div>
+                  </Link>
+                </Button>
+              ) : (
+                <Button asChild variant="ghost" size="sm" className="hidden md:flex text-gray-700 hover:text-black p-2">
+                  <Link href="/auth/signin">
+                    <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center transition-colors">
+                      <User className="h-4 w-4" />
+                    </div>
+                  </Link>
+                </Button>
+              )}
 
               {/* Mobile actions */}
               <div className="flex items-center gap-2 md:hidden">
@@ -80,7 +94,7 @@ export default function Header() {
                   onClick={() => setIsCartOpen(true)}
                   className="text-gray-700 hover:text-black p-2 relative"
                 >
-                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
+                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center transition-colors">
                     <ShoppingCart className="h-4 w-4" />
                   </div>
                   <span className="absolute -top-1 -right-1 bg-black text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
@@ -88,14 +102,23 @@ export default function Header() {
                   </span>
                 </Button>
 
-                <Button variant="ghost" size="sm" className="text-gray-700 hover:text-black p-2">
-                <Link href="/perfil">
-
-                  <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors">
-                    <User className="h-4 w-4" />
-                  </div>
-                  </Link>
-                </Button>
+                {isLoggedIn ? (
+                  <Button asChild variant="ghost" size="sm" className="text-gray-700 hover:text-black p-2">
+                    <Link href="/perfil">
+                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center transition-colors">
+                        <User className="h-4 w-4" />
+                      </div>
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button asChild variant="ghost" size="sm" className="text-gray-700 hover:text-black p-2">
+                    <Link href="/auth/signin">
+                      <div className="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center transition-colors">
+                        <User className="h-4 w-4" />
+                      </div>
+                    </Link>
+                  </Button>
+                )}
               </div>
             </div>
           </div>

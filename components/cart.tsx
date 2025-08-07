@@ -1,11 +1,11 @@
 "use client"
 
 import type React from "react"
-
+import Link from "next/link"
 import { useEffect } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
-import { X, Plus, Minus, Trash2 } from "lucide-react"
+import { X, Plus, Minus, Trash2 } from 'lucide-react'
 
 interface CartItem {
   id: number
@@ -20,6 +20,7 @@ interface CartProps {
   onClose: () => void
 }
 
+// Mock cart items
 const cartItems: CartItem[] = [
   {
     id: 1,
@@ -65,16 +66,26 @@ export default function Cart({ isOpen, onClose }: CartProps) {
     }
   }
 
-  if (!isOpen) return null
-
   const subtotal = cartItems.reduce((total, item) => {
     const price = Number.parseFloat(item.price.replace(/[R$\s.,]/g, "")) / 100
     return total + price * item.quantity
   }, 0)
 
   return (
-    <div className="fixed inset-0 z-50 shadow-xl bg-black/30 " onClick={handleOverlayClick}>
-      <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl transform transition-transform">
+    // Overlay com transição de opacidade e fundo escuro sutil
+    // O componente agora está sempre no DOM, mas sua visibilidade e interatividade são controladas por classes
+    <div
+      className={`fixed inset-0 z-50 transition-opacity duration-300 ${
+        isOpen ? "opacity-100 bg-black/50" : "opacity-0 pointer-events-none"
+      }`}
+      onClick={handleOverlayClick}
+    >
+      {/* Sidebar do Carrinho com transição de transformação */}
+      <div
+        className={`absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-xl transform transition-transform duration-300 ${
+          isOpen ? "translate-x-0" : "translate-x-full"
+        }`}
+      >
         <div className="flex flex-col h-full">
           {/* Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
@@ -144,7 +155,9 @@ export default function Cart({ isOpen, onClose }: CartProps) {
               </div>
 
               <div className="space-y-3">
-                <Button className="w-full bg-black hover:bg-gray-800 text-white">Finalizar Compra</Button>
+                <Button asChild className="w-full bg-black hover:bg-gray-800 text-white">
+                  <Link href="/checkout">Finalizar Compra</Link>
+                </Button>
                 <Button
                   variant="outline"
                   className="w-full border-gray-300 text-gray-700 hover:bg-gray-50 bg-transparent"
